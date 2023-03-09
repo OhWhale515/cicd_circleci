@@ -13,19 +13,21 @@ jobs:
       AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
     steps:
       - checkout
-      - run: echo test 2
-      - run: echo $CODEBUILD_WEBHOOK_EVENT
+      - run: npm install
+      - run: npm rebuild # optional step to fix any native modules
+      - run: npm install aws-cli
+      - run: npm run build
       - run:
-          name: Deploy to Beta
+          name : Deploy to Beta
           command: |
             if [[ $CODEBUILD_WEBHOOK_EVENT == *"PULL_REQUEST"* ]]; then 
-              npx aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
+              npx aws s3 cp .\index.html s3://circleci-beta-515/index.html --acl public-read
             fi
       - run:
           name: Deploy to Prod
           command: |
             if [[ $CODEBUILD_WEBHOOK_EVENT == "PULL_REQUEST_MERGED" ]]; then 
-              npx aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
+              npx aws s3 cp .\index.html s3://circleci-prod-515/index.html --acl public-read
             fi
             
 workflows:
