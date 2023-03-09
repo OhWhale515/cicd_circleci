@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-s3: circleci/aws-cli@3.1
+  aws-cli: circleci/aws-cli@3.1
 on:
   pull_request:
     types: [closed] 
@@ -8,14 +8,15 @@ jobs:
   deploy_prod:
     executor: aws-cli/default
     steps:
+      - checkout
       - run: 
           name: Install awscli
           command: sudo pip install awscli
-      - checkout
       - aws-cli/setup:          
           aws-access-key-id: AWS_ACCESS_KEY
           aws-secret-access-key: AWS_SECRET_KEY
           aws-region: AWS_REGION_NAME
+      
       - run: >-
           aws s3 cp .\index.html s3://circleci-beta-515/index.html --acl public-read
 workflows:
