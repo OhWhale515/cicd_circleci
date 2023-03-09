@@ -8,6 +8,9 @@ jobs:
     docker:
       - image: circleci/node:12.13.0-browsers
     working_directory: ~/cicd_circleci
+    environment:
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY 
     steps:
       - checkout
       - run: npm install
@@ -17,13 +20,13 @@ jobs:
       - run:
           name : Deploy to Beta
           command: |
-            if [[ $CODEBUILD_WEBHOOK_EVENT == *"PULL_REQUEST"* ]]; then 
+            if [[ "$CIRCLE_BRANCH" == "beta" ]]; then 
               npx aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
             fi
       - run:
           name: Deploy to Prod
           command: |
-            if [[ $CODEBUILD_WEBHOOK_EVENT == "PULL_REQUEST_MERGED" ]]; then 
+            if [[ "$CIRCLE_BRANCH" == "main" ]]; then 
               npx aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
             fi
             
@@ -31,8 +34,4 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      - build_and_deploy:
-          filters:
-            branches:
-              only:
-                - main
+      - build_and_deploy
