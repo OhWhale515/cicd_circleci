@@ -6,7 +6,7 @@
     "deploy-s3-beta": "aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read",
     "deploy-s3-prod": "aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read"
   },
-  "devDependencies": {
+  "dependencies": {
     "aws-cli": "^2.4.10"
   }
 }
