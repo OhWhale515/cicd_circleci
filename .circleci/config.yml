@@ -1,3 +1,4 @@
+
 version: 2.1
 
 orbs:
@@ -11,21 +12,20 @@ jobs:
     steps:
       - checkout
       - run: npm install
-      - run: npm install --save-dev aws-cli@^1.18.1
+      - run: npm rebuild # optional step to fix any native modules
+      - run: npm install -g aws-cli
       - run: npm run build
       - run:
           name : Deploy to Beta
           command: |
             if [[ $CODEBUILD_WEBHOOK_EVENT == *"PULL_REQUEST"* ]]; then 
-              sudo apt-get update && sudo apt-get install -y awscli
-              aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
+              npm run deploy-s3-beta
             fi
       - run:
           name: Deploy to Prod
           command: |
             if [[ $CODEBUILD_WEBHOOK_EVENT == "PULL_REQUEST_MERGED" ]]; then 
-              sudo apt-get update && sudo apt-get install -y awscli
-              aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
+              npm run deploy-s3-prod
             fi
             
 workflows:
