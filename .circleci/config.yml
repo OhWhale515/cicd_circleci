@@ -6,7 +6,9 @@ on:
     types: [opened, closed, synchronize, merged]
 
 jobs:
-  aws_setup: 
+
+
+  deploy_beta:
     executor: aws-cli/default
     steps:
       - checkout
@@ -14,10 +16,6 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           aws-region: AWS_REGION_NAME
-
-  deploy_beta:
-    executor: aws-cli/default
-    steps:
       - run: >-
           aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
 
@@ -25,15 +23,16 @@ jobs:
     executor: aws-cli/default
     steps:
       - checkout
+      - aws-cli/setup:          
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_REGION_NAME
       - run: >-
           aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
 workflows:
   aws-cli:
     jobs:
-      - aws_setup
-      - deploy_beta:
-          requires:
-            - aws_setup 
+      - deploy_beta
       - deploy_prod:
           requires:
             - aws_setup
