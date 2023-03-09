@@ -8,7 +8,7 @@ jobs:
     docker:
       - image: circleci/node:12.13.0-browsers
     working_directory: ~/cicd_circleci
-    auth:
+    environment:
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
       AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY 
     steps:
@@ -17,6 +17,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y awscli
       - run: npm install
       - run: npm rebuild # optional step to fix any native modules
+
       - run: npm run build
       - run:
           name : Deploy to Beta
