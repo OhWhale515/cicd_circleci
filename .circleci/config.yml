@@ -31,8 +31,12 @@ workflows:
   aws-cli:
     jobs:
       - aws_setup
-      - deploy_beta 
+      - deploy_beta:
+          requires:
+            - aws_setup 
       - deploy_prod:
+          requires:
+            - aws_setup
           filters:
             branches:
               only:
