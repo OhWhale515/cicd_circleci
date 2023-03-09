@@ -9,22 +9,17 @@ jobs:
     executor: aws-cli/default
     steps:
       - checkout
-      - run: 
-          name: Install awscli
-          command: sudo pip install awscli
       - aws-cli/setup:          
           aws-access-key-id: AWS_ACCESS_KEY
           aws-secret-access-key: AWS_SECRET_KEY
           aws-region: AWS_REGION_NAME
       - run: >-
-          aws s3 cp .\index.html s3://circleci-beta-515/index.html --acl public-read
+          aws s3 cp .\index.html s3://circleci-prod-515/index.html --acl public-read
 workflows:
   aws-cli:
     jobs:
       - deploy_prod:
-          requires:
-            - checkout
           filters:
             branches:
               only:
-                - master
+                - main
