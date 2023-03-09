@@ -15,7 +15,7 @@ jobs:
           fi
           echo "Deploying beta ..."
       - run: |
-          if [[ $CODEBUILD_WEBHOOK_EVENT == *"MERGED"* ]] ; then
+          if [[ $CODEBUILD_WEBHOOK_EVENT == *"PULL_REQUEST_MERGED"* ]] ; then
             aws s3 cp index.html s3://codebuild-prod515/index.html --acl public-read
           fi
           echo "Deploying production..."
@@ -28,7 +28,7 @@ jobs:
           filters:
             branches:
               only:
-                - master
+                - main
       - pre_prod_hold:
           type: approval
           requires:
@@ -39,7 +39,7 @@ jobs:
           filters:
             branches:
               only:
-                - master
+                - main
 
   approval:
     executor: approval/executor
@@ -57,4 +57,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
