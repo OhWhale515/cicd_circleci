@@ -8,6 +8,9 @@ jobs:
   deploy_prod:
     executor: aws-cli/default
     steps:
+      - run: 
+          name: Install awscli
+          command: sudo pip install awscli
       - checkout
       - aws-cli/setup:          
           aws-access-key-id: AWS_ACCESS_KEY
