@@ -2,11 +2,27 @@
   "name": "cicd_circleci",
   "version": "1.0.0",
   "scripts": {
-    "build": "echo 'Building sample app...'",
-    "deploy-s3-beta": "aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read",
-    "deploy-s3-prod": "aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read"
+    "build": "webpack",
+    "start": "webpack-dev-server --open",
+    "test": "jest"
   },
   "dependencies": {
-    "aws-sdk": "latest"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "aws-sdk": "^2.968.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.6.0",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "jest": "^23.6.0",
+    "react-test-renderer": "^16.8.6",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
   }
 }
