@@ -15,7 +15,9 @@ jobs:
       - checkout
       - run: npm install
       - run: npm rebuild # optional step to fix any native modules
-      - run: npm install aws-sdk
+      - run: |
+          sudo apt-get update && sudo apt-get install -y awscli
+
       - run: npm run build
       - run:
           name : Deploy to Beta
