@@ -28,7 +28,7 @@ jobs:
           filters:
             branches:
               only:
-                - master
+                - main
       - pre_prod_hold:
           type: approval
           requires:
@@ -39,7 +39,7 @@ jobs:
           filters:
             branches:
               only:
-                - master
+                - main
 
   approval:
     executor: approval/executor
@@ -57,4 +57,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
