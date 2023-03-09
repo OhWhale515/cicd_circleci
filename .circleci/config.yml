@@ -20,14 +20,14 @@ jobs:
 workflows:
   aws-cli:
     jobs:
-      - deploy-s3-beta:
+      - deploy_beta:
           requires:
             - hold
       - pre_prod_hold:
           type: approval
           requires:
-            - deploy-s3-beta
-      - deploy-s3-prod:
+            - deploy_beta
+      - deploy_prod:
           requires:
             - pre_prod_hold
           filters:
