@@ -13,14 +13,20 @@ jobs:
       - run: npm install
       - run: npm run build
       - run:
-          name: Deploy to Beta
+          name : Deploy to Beta
           command: |
-            if [[ $CODEBUILD_WEBHOOK_EVENT == *"PULL_REQUEST"* ]]; then /usr/bin/aws s3 cp ~/cicd_circleci/index.html s3://circleci-beta-515/index.html --acl public-read; fi
+            if [[ $CODEBUILD_WEBHOOK_EVENT == *"PULL_REQUEST"* ]]; then 
+              sudo apt-get update && sudo apt-get install -y awscli
+              aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
+            fi
       - run:
           name: Deploy to Prod
           command: |
-            if [[ $CODEBUILD_WEBHOOK_EVENT == "PULL_REQUEST_MERGED" ]]; then /usr/bin/aws s3 cp ~/cicd_circleci/index.html s3://circleci-prod-515/index.html --acl public-read; fi
-
+            if [[ $CODEBUILD_WEBHOOK_EVENT == "PULL_REQUEST_MERGED" ]]; then 
+              sudo apt-get update && sudo apt-get install -y awscli
+              aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
+            fi
+            
 workflows:
   version: 2
   build-deploy:
