@@ -31,3 +31,8 @@ jobs:
             branches:
               only:
                 - master
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build_and_deploy
