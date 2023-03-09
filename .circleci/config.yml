@@ -7,7 +7,7 @@ jobs:
   build_and_deploy:
     docker:
       - image: circleci/node:12.13.0-browsers
-    working_directory: ~/.circleci
+    working_directory: ~/cicd_circleci
     steps:
       - checkout
       - run: npm install

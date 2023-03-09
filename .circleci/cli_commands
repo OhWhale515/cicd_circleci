@@ -1,1 +1,3 @@
-aws s3 cp .\index.html s3://luit-gold-beta/index.html --acl public-read
+ if [[ $CODEBUILD_WEBHOOK_EVENT == *"PULL_REQUEST"* ]] ; then aws s3 cp index html s3://circleci-beta-515/index.html --acl public-read fi
+
+  if [[ $CODEBUILD_WEBHOOK_EVENT == "PULL_REQUEST_MERGED" ]] ; then aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read fi
