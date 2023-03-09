@@ -21,13 +21,13 @@ jobs:
           name : Deploy to Beta
           command: |
             if [[ $CIRCLE_PULL_REQUEST == "" ]]; then 
-              npx aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
+               /usr/bin/aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
             fi
       - run:
           name: Deploy to Prod
           command: |
             if [[ $CIRCLE_BRANCH == "main" ]]; then 
-              npx aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
+              /usr/bin/aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
             fi
             
 workflows:
