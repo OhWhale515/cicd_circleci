@@ -1,25 +1,18 @@
 version: 2.1
-orbs:
-  aws-cli: circleci/aws-cli@3.1
 
-on:
-  pull_request:
-    types: [closed]
-    
-jobs:
-  build_and_deploy:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:          
-          aws-access-key-id: $AWS_ACCESS_KEY
-          aws-secret-access-key: $AWS_SECRET_KEY
-          aws-region: $AWS_REGION_NAME
-      - run: >-
-            sudo apt-get update && sudo apt-get install -y awscli
 workflows:
-  aws-cli:
+  build-deploy:
     jobs:
+      - build_and_deploy_aws:
+          filters:
+            branches:
+              only:
+                - main
+      - build_and_deploy:
+          filters:
+            branches:
+              only:
+                - main
       - deploy_beta:
           requires:
             - hold
@@ -33,4 +26,88 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - master
+
+jobs:
+  build_and_deploy_aws:
+    docker:
+      - image: 'circleci/python:3.8.0'      
+    environment:
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_KEY
+      AWS_DEFAULT_REGION: $AWS_REGION_NAME
+    steps:
+      - run: 
+          name: Install awscli
+          command: sudo pip install awscli 
+      - checkout
+      - aws-s3/sync:
+          from: ./
+          to: 's3://circleci-beta-515/index.html --acl public-read'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
+  
+    working_directory: ~/app
+    
+  build_and_deploy:
+    docker:
+      - image: circleci/classic:202201-01
+    working_directory: ~/cicd_circleci
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Beta
+          command: |
+            if [[ $CIRCLE_PULL_REQUEST == "" ]]; then 
+               /usr/bin/aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read ;
+            fi
+      - run:
+          name: Deploy to Prod
+          command: |
+            if [[ $CIRCLE_BRANCH == "main" ]]; then 
+              /usr/bin/aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read ;
+            fi
+            
+  deploy_beta:
+    requires:
+      - hold
+    docker:
+      - image: circleci/classic:202201-01
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Beta
+          command: |
+            /usr/bin/aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
+            
+  pre_prod_hold:
+    type: approval
+    requires:
+      - deploy_beta
+    docker:
+      - image: circleci/classic:202201-01
+    steps:
+      - checkout
+      - run:
+          name: Wait for Approval
+          command: echo "Waiting for approval from production team"
+            
+  deploy_prod:
+    requires:
+      - pre_prod_hold
+    filters:
+      branches:
+        only:
+          - master
+    docker:
+      - image: circleci/classic:202201-01
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Prod
+          command: |
+            /usr/bin/aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
+
+
