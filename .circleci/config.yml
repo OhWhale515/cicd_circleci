@@ -4,8 +4,10 @@ orbs:
 on:
   pull_request:
     types: [opened, closed, synchronize, merged]
- 
+
 jobs:
+
+
   deploy_beta:
     executor: aws-cli/default
     steps:
@@ -30,12 +32,10 @@ jobs:
 workflows:
   aws-cli:
     jobs:
-      - deploy_beta:
-          filters:
-            branches:
-              only:
-                - on 
+      - deploy_beta
       - deploy_prod:
+          requires:
+            - deploy_beta
           filters:
             branches:
               only:
