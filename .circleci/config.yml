@@ -10,6 +10,7 @@ jobs:
         environment:
           AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
           AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY 
+          
     working_directory: ~/cicd_circleci
 
     steps:
