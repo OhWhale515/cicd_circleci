@@ -1,0 +1,12 @@
+{
+  "name": "cicd_circleci",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Building'",
+    "deploy-s3-beta": "/usr/bin/aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read",
+    "deploy-s3-prod": "/usr/bin/aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read"
+  },
+  "dependencies": {
+    "aws-sdk": "latest"
+  }
+}
