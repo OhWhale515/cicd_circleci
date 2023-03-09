@@ -11,7 +11,7 @@ jobs:
     steps:
       - checkout
       - run: npm install
-      - run: npm run build
+      - run: npm install -g aws-cli
       - run: |
           if [[ $CIRCLE_BRANCH == "main" ]]; then
             npm run deploy-s3-prod
