@@ -35,7 +35,7 @@ workflows:
       - deploy_beta
       - deploy_prod:
           requires:
-            - aws_setup
+            - deploy_beta
           filters:
             branches:
               only:
