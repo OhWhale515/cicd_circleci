@@ -23,17 +23,21 @@ jobs:
           name : Deploy to Beta
           command: |
             if [[ $CIRCLE_PULL_REQUEST == "" ]]; then 
-               /usr/bin/aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
+               /usr/bin/aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read --region us-east-1 --access-key $AWS_ACCESS_KEY_ID --secret-key $AWS_SECRET_ACCESS_KEY
             fi
       - run:
           name: Deploy to Prod
           command: |
             if [[ $CIRCLE_BRANCH == "main" ]]; then 
-              /usr/bin/aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read
+              /usr/bin/aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read --region us-east-1 --access-key $AWS_ACCESS_KEY_ID --secret-key $AWS_SECRET_ACCESS_KEY
             fi
             
 workflows:
   version: 2
   build-deploy:
     jobs:
-      - build_and_deploy
+      - build_and_deploy:
+          filters:
+            branches:
+              only:
+                - main
