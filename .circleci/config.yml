@@ -22,9 +22,13 @@ jobs:
       - run:
           name: Trigger Approvals
           command: circleci local approve build_and_deploy
-      - deploy_beta: 
+      - deploy_beta:
           requires:
             - approval
+          filters:
+            branches:
+              only:
+                - master
       - pre_prod_hold:
           type: approval
           requires:
