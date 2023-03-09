@@ -8,6 +8,9 @@ jobs:
     docker:
       - image: circleci/node:12.13.0-browsers
     working_directory: ~/cicd_circleci
+    environment:
+      AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY 
     steps:
       - checkout
       - run: npm install
