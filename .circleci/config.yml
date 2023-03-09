@@ -34,7 +34,7 @@ workflows:
           filters:
             branches:
               only:
-                - branch      
+                - pull_request 
       - deploy_prod:
           filters:
             branches:
