@@ -11,9 +11,9 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup:          
-          aws-access-key-id: $AWS_ACCESS_KEY_ID
-          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
-          aws-region: $AWS_REGION_NAME
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_REGION_NAME
       - run: >-
           aws s3 cp index.html s3://circleci-beta-515/index.html --acl public-read
 
