@@ -8,31 +8,24 @@ jobs:
     steps:
       - checkout
       - run: echo test 2
-      - run: echo "$CODEBUILD_WEBHOOK_EVENT"
+      - run: echo $CODEBUILD_WEBHOOK_EVENT
       - run: |
           if [[ $CODEBUILD_WEBHOOK_EVENT == *"PULL_REQUEST"* ]] ; then
             aws s3 cp index.html s3://codebuild-beta/index.html --acl public-read
           fi
-          echo "Deploying beta ..."
+      - run: echo "Deploying beta ..."
       - run: |
           if [[ $CODEBUILD_WEBHOOK_EVENT == *"MERGED"* ]] ; then
             aws s3 cp index.html s3://codebuild-prod515/index.html --acl public-read
           fi
-          echo "Deploying production..."
-      - run:
-          name: Trigger Approvals
-          command: circleci local approve build_and_deploy
-      - deploy_beta:
+      
+      - approval:
           requires:
-            - approval
-          filters:
-            branches:
-              only:
-                - master
+            - deploy_beta
       - pre_prod_hold:
           type: approval
           requires:
-            - deploy_beta
+            - approval
       - deploy_prod:
           requires:
             - pre_prod_hold
