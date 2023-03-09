@@ -7,6 +7,6 @@
     "deploy-s3-prod": "aws s3 cp index.html s3://circleci-prod-515/index.html --acl public-read"
   },
   "dependencies": {
-    "aws-cli": "^2.4.10"
+    "aws-cli": "^2.8.5"
   }
 }
