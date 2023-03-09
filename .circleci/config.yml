@@ -7,11 +7,11 @@ jobs:
   build_and_deploy:
     docker:
       - image: circleci/node:12.13.0-browsers
-    working_directory: ~/cicd_circleci
-    auth:
+    environment:
       AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
       AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY 
       
+    working_directory: ~/cicd_circleci 
     steps:
       - checkout
       - run: |
