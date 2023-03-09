@@ -25,7 +25,7 @@ jobs:
           name: Deploy to Prod
           command: |
             if [[ $CODEBUILD_WEBHOOK_EVENT == "PULL_REQUEST_MERGED" ]]; then 
-              npx aws s3 cp index.html s3://codebuild-prod515/index.html --acl public-read
+              npx aws s3 cp index.html s3://codebuild-prod-515/index.html --acl public-read
             fi
             
 workflows:
