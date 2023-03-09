@@ -1,4 +1,3 @@
-
 version: 2.1
 
 orbs:
@@ -13,7 +12,7 @@ jobs:
       - checkout
       - run: npm install
       - run: npm rebuild # optional step to fix any native modules
-      - run: npm install -g aws-cli
+      - run: npm install -g aws-cli@latest
       - run: npm run build
       - run:
           name : Deploy to Beta
